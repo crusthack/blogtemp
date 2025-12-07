@@ -22,7 +22,7 @@ export function getAllCategories() {
     const fileContents = fs.readFileSync(fullPath, "utf8");
     const { data } = matter(fileContents);
 
-    if (data.category) {
+    if (data.category && data.category != "None") {
       categories.add(data.category);
     }
   });

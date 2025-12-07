@@ -13,6 +13,7 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import CodeBlockCopyButton from "@/components/CodeBlockCopyButton";
 
 import { TocItem, extractTocFromMarkdown } from "@/lib/extractToc";
+import CategoryPage from "../page";
 
 export async function generateStaticParams() {
   const posts = getSortedPostsData();
@@ -24,10 +25,15 @@ export async function generateStaticParams() {
 
 export default async function Post({
   params,
-}: {
-  params: Promise<{ slug: string }>;
+}: {                                                            
+  params: Promise<{ category: string, slug?: string }>;
 }) {
-  const { slug } = await params;
+  const { category, slug } = await params;
+  console.log(category);
+  if(!slug)
+  {
+    return ("hello, world!!");
+  }
   const postData = getPostData(slug);
   const toc: TocItem[] = extractTocFromMarkdown(postData.content);
 
