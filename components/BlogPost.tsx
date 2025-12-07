@@ -9,7 +9,7 @@ interface BlogPostProps {
 
 export default function BlogPost({ post, children }: BlogPostProps) {
   return (
-    <article className="w-full mx-auto bg-gray-100 p-4 rounded-md">
+    <article className="w-full bg-gray-100 p-4 rounded-md">
 
       {/* 제목/날짜 */}
       <header className="mb-8">
@@ -23,8 +23,8 @@ export default function BlogPost({ post, children }: BlogPostProps) {
 
 
       {/* 본문 전체 레이아웃 (flex + markdown-body) */}
-      <div className="prose dark:prose-invert bg-gray-100">
-        <div className="flex gap-8 !bg-gray-100 p-6 rounded-md">
+      <div className="bg-gray-100">
+        <div className="!bg-gray-100 p-6 rounded-md">
 
           {/* markdown 본문 */}
           <div className="markdown-body !bg-gray-100">

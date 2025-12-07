@@ -15,6 +15,12 @@ import CodeBlockCopyButton from "@/components/CodeBlockCopyButton";
 import { TocItem, extractTocFromMarkdown } from "@/lib/extractToc";
 import CategoryPage from "../page";
 
+const prettyOptions = {
+  theme: "github-dark-dimmed",
+  keepBackground: true,
+};
+
+
 export async function generateStaticParams() {
   const posts = getSortedPostsData();
   return posts.map((post) => ({
@@ -38,7 +44,7 @@ export default async function Post({
   const toc: TocItem[] = extractTocFromMarkdown(postData.content);
 
   return (
-    <div className="grid grid-cols-[1fr_2fr_1fr] gap-8 w-full">
+    <div className="grid grid-cols-[1fr_800px_1fr] gap-8 w-full">
       <div></div>
 
       {/* 중간 콘텐츠 */}
@@ -53,7 +59,7 @@ export default async function Post({
               mdxOptions: {
                 remarkPlugins: [remarkGfm, remarkMath],
                 rehypePlugins: [
-                  rehypePrettyCode,
+                  [rehypePrettyCode, prettyOptions],
                   rehypeKatex,
                   rehypeSlug,
                   [

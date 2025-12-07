@@ -14,50 +14,78 @@ export interface Post {
   content: string
 }
 
-export function getAllCategories() {
-  const files = fs.readdirSync(postsDirectory);
-  const categories = new Set<string>();
+function walkDir(dir: string, fileList: string[] = []) {
+  const files = fs.readdirSync(dir);
 
   files.forEach((file) => {
-    const fullPath = path.join(postsDirectory, file);
-    const fileContents = fs.readFileSync(fullPath, "utf8");
-    const { data } = matter(fileContents);
-
-    if (data.category && data.category != "None") {
-      categories.add(data.category);
+    const fullPath = path.join(dir, file);
+    if (fs.statSync(fullPath).isDirectory()) {
+      walkDir(fullPath, fileList); // 재귀
+    } else if (file.endsWith(".mdx")) {
+      fileList.push(fullPath);
     }
   });
 
-  return Array.from(categories);
+  return fileList;
 }
 
-export function getSortedPostsData(): Omit<Post, 'content'>[] {
-  if (!fs.existsSync(postsDirectory)) return []
-  
-  const fileNames = fs.readdirSync(postsDirectory)
-  const allPostsData = fileNames.map((fileName) => {
-    const slug = fileName.replace(/\.mdx$/, '')
-    const fullPath = path.join(postsDirectory, fileName)
-    const fileContents = fs.readFileSync(fullPath, 'utf8')
-    const { data } = matter(fileContents)
+
+export function getAllCategories() {
+  const dirs = fs.readdirSync(postsDirectory).filter((item) => {
+    const fullPath = path.join(postsDirectory, item);
+    return fs.statSync(fullPath).isDirectory();
+  });
+
+  return dirs;
+}
+
+
+export function getSortedPostsData(): Omit<Post, "content">[] {
+  if (!fs.existsSync(postsDirectory)) return [];
+
+  const filePaths = walkDir(postsDirectory); // 하위 폴더 포함 모든 MDX 파일
+  const allPostsData = filePaths.map((fullPath) => {
+    const fileContents = fs.readFileSync(fullPath, "utf8");
+    const { data } = matter(fileContents);
+
+    const slug = path.basename(fullPath).replace(/\.mdx$/, "");
+    const category = path.basename(path.dirname(fullPath)); // 바로 상위 폴더 이름
 
     return {
       slug,
-      ...(data as any),
-    }
-  })
+      category: data.category || category, // front-matter 없으면 폴더명 사용
+      title: data.title,
+      date: data.date,
+      description: data.description,
+    };
+  });
 
-  return allPostsData.sort((a, b) => (a.date < b.date ? 1 : -1))
+  return allPostsData.sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
+
 export function getPostData(slug: string): Post {
-  const fullPath = path.join(postsDirectory, `${slug}.mdx`)
-  const fileContents = fs.readFileSync(fullPath, 'utf8')
-  const { data, content } = matter(fileContents)
+  const filePaths = walkDir(postsDirectory);
+
+  const fullPath = filePaths.find((p) =>
+    p.endsWith(`${slug}.mdx`)
+  );
+
+  if (!fullPath) {
+    throw new Error(`Post not found: ${slug}`);
+  }
+
+  const fileContents = fs.readFileSync(fullPath, "utf8");
+  const { data, content } = matter(fileContents);
+
+  const category = path.basename(path.dirname(fullPath));
 
   return {
     slug,
+    category: data.category || category,
+    title: data.title,
+    date: data.date,
+    description: data.description,
     content,
-    ...(data as any),
-  }
+  };
 }
