@@ -13,6 +13,7 @@ import rehypeSlug from 'rehype-slug'
 import CodeBlockCopyButton from '@/components/CodeBlockCopyButton'
 
 import { TocItem, extractTocFromMarkdown } from "@/lib/rehype-toc";
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 
 
 export async function generateStaticParams() {
@@ -42,8 +43,28 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
                             }}
                             options={{
                                 mdxOptions: {
-                                    remarkPlugins: [remarkGfm, remarkMath, [remarkToc, {heading: 'The Table', maxDepth: 2, parents: ['listItem', 'root'], skip: 'delta'}]],
-                                    rehypePlugins: [rehypePrettyCode, rehypeKatex, rehypeSlug],
+                                    remarkPlugins: [remarkGfm, remarkMath,
+                                        [remarkToc, { heading: 'The Table', maxDepth: 2, parents: ['listItem', 'root'], skip: 'delta' }]],
+                                    rehypePlugins: [
+                                        rehypePrettyCode,
+                                        rehypeKatex,
+                                        rehypeSlug, // ① id 생성
+                                        [
+                                            rehypeAutolinkHeadings,
+                                            {
+                                                behavior: "append",
+                                                properties: {
+                                                    className: ["anchor-link"],
+                                                },
+                                                content() {
+                                                    return {
+                                                        type: "text",
+                                                        value: " 🔗", // 아이콘(원하는 걸로 변경 가능)
+                                                    };
+                                                },
+                                            },
+                                        ],
+                                    ]
                                 },
                             }}
                         />
