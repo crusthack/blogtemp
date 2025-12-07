@@ -7,35 +7,27 @@ export interface TocItem {
   id: string;
 }
 
-export function rehypeToc(toc: TocItem[]) {
-  const usedIds = new Map<string, number>();  // ← 추가
+function slugify(text: string) {
+  return text
+    .toLowerCase()
+    .replace(/[^\w가-힣 ]+/g, "")
+    .trim()
+    .replace(/\s+/g, "-");
+}
 
-  return () => (tree: Root) => {
-    visit(tree, "element", (node: any) => {
-      if (/^h[1-6]$/.test(node.tagName)) {
-        const text =
-          node.children
-            ?.filter((c: any) => c.type === "text")
-            ?.map((c: any) => c.value)
-            .join(" ") ?? "";
+export function extractTocFromMarkdown(content: string) {
+  const toc: TocItem[] = [];
 
-        let id = String(node.properties?.id ?? "");
+  const headingRegex = /^(#{1,6})\s+(.*)$/gm;
+  let match;
 
-        // 🔥 같은 id가 이미 나오면 suffix 추가
-        if (usedIds.has(id)) {
-          const count = usedIds.get(id)! + 1;
-          usedIds.set(id, count);
-          id = `${id}-${count}`;
-        } else {
-          usedIds.set(id, 0);
-        }
+  while ((match = headingRegex.exec(content)) !== null) {
+    const level = match[1].length;  // # 개수
+    const text = match[2].trim();   // 제목
+    const id = slugify(text);       // ID 만들기 (직접 구현)
 
-        toc.push({
-          level: Number(node.tagName.slice(1)),
-          text,
-          id,
-        });
-      }
-    });
-  };
+    toc.push({ level, text, id });
+  }
+
+  return toc;
 }

@@ -4,6 +4,7 @@ import BlogPost from '@/components/BlogPost'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
+import remarkToc from 'remark-toc'
 import rehypeHighlight from 'rehype-highlight'
 import rehypePrettyCode from 'rehype-pretty-code'
 import rehypeKatex from 'rehype-katex'
@@ -11,10 +12,8 @@ import rehypeSlug from 'rehype-slug'
 
 import CodeBlockCopyButton from '@/components/CodeBlockCopyButton'
 
-import { rehypeToc, TocItem } from "@/lib/rehype-toc";
+import { TocItem, extractTocFromMarkdown } from "@/lib/rehype-toc";
 
-const toc: TocItem[] = [];
-const tocPlugin = rehypeToc(toc);
 
 export async function generateStaticParams() {
     const posts = getSortedPostsData()
@@ -26,6 +25,7 @@ export async function generateStaticParams() {
 export default async function Post({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params
     const postData = getPostData(slug)
+    const toc: TocItem[] = extractTocFromMarkdown(postData.content);
 
     return (
         <div className='flex'>
@@ -42,8 +42,8 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
                             }}
                             options={{
                                 mdxOptions: {
-                                    remarkPlugins: [remarkGfm, remarkMath],
-                                    rehypePlugins: [rehypePrettyCode, rehypeKatex, rehypeSlug, tocPlugin],
+                                    remarkPlugins: [remarkGfm, remarkMath, [remarkToc, {heading: 'The Table', maxDepth: 2, parents: ['listItem', 'root'], skip: 'delta'}]],
+                                    rehypePlugins: [rehypePrettyCode, rehypeKatex, rehypeSlug],
                                 },
                             }}
                         />
