@@ -7,10 +7,9 @@ const postsDirectory = path.join(process.cwd(), 'content/posts')
 
 export interface Post {
   slug: string
-  title: string
   date: string
-  description?: string
-  tags?: string[]
+  category: string
+  title: string
   content: string
 }
 
