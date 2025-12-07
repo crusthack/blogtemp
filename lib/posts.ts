@@ -74,6 +74,15 @@ export function getSortedPostsData(): Omit<Post, "content">[] {
   return allPostsData.sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
+export function getPostsByCategory(category: string) {
+  const allPosts = getSortedPostsData();
+
+  return allPosts
+    .filter(p => p.category === category)
+    .sort((a, b) => a.slug.localeCompare(b.slug));
+}
+
+
 
 export function getPostData(slug: string): Post {
   slug = slug.toLowerCase();

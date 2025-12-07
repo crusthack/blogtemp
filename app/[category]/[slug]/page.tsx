@@ -14,6 +14,7 @@ import CodeBlockCopyButton from "@/components/CodeBlockCopyButton";
 
 import { TocItem, extractTocFromMarkdown } from "@/lib/extractToc";
 import CategoryPage from "../page";
+import CategorySidebar from "@/components/CategorySidebar";
 
 const prettyOptions = {
   theme: "github-dark-dimmed",
@@ -31,7 +32,7 @@ export async function generateStaticParams() {
 
 export default async function Post({
   params,
-}: {                                                            
+}: {
   params: Promise<{ category: string, slug?: string }>;
 }) {
   let { category, slug } = await params;
@@ -42,7 +43,7 @@ export default async function Post({
 
   return (
     <div className="grid grid-cols-[1fr_800px_1fr] gap-8 w-full">
-      <div></div>
+      <div className="flex justify-end"> <CategorySidebar category={category} /></div>
 
       {/* 중간 콘텐츠 */}
       <div className="w-full mx-auto">
@@ -73,10 +74,13 @@ export default async function Post({
             }}
           />
         </BlogPost>
-      </div>
+      </div >
 
       {/* 오른쪽 TOC → 클라이언트 컴포넌트 */}
-      <PostToc toc={toc} />
+      <div className="flex justify-start">
+        <PostToc toc={toc} />
+      </div>
+
     </div>
   );
 }
