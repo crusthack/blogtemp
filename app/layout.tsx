@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import 'github-markdown-css/github-markdown-light.css'
 import Navi from "@/components/Navigation";
+import { getAllCategories } from "@/lib/posts";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,12 +25,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const categories = getAllCategories(); // 서버에서 읽기
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-        <Navi/>
+        <Navi categories={categories} />
         {children}
       </body>
     </html>

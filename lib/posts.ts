@@ -13,6 +13,23 @@ export interface Post {
   content: string
 }
 
+export function getAllCategories() {
+  const files = fs.readdirSync(postsDirectory);
+  const categories = new Set<string>();
+
+  files.forEach((file) => {
+    const fullPath = path.join(postsDirectory, file);
+    const fileContents = fs.readFileSync(fullPath, "utf8");
+    const { data } = matter(fileContents);
+
+    if (data.category) {
+      categories.add(data.category);
+    }
+  });
+
+  return Array.from(categories);
+}
+
 export function getSortedPostsData(): Omit<Post, 'content'>[] {
   if (!fs.existsSync(postsDirectory)) return []
   
