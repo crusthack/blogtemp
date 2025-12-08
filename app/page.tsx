@@ -1,4 +1,4 @@
-import { getPostData, getSortedPostsData } from '@/lib/posts'
+import { getPostDatac, getSortedPostsData } from '@/lib/posts'
 import BlogPost from '@/components/BlogPost'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import remarkGfm from 'remark-gfm'
@@ -13,7 +13,7 @@ import { TocItem, extractTocFromMarkdown } from "@/lib/extractToc";
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 
 export default async function Post() {
-    const postData = getPostData('index')
+    const postData = getPostDatac("", 'index')
     const toc: TocItem[] = extractTocFromMarkdown(postData.content);
 
     return (
