@@ -52,12 +52,17 @@ export default async function Post({
 }) {
   let { category, slug } = await params;
   console.log(category);
-  const postData = getPostDatac(category!, slug!);
+  const decodedCategory = typeof category === "string" ? decodeURIComponent(category).replace(/\+/g, " ").trim() : category;
+
+  const postData = getPostDatac(decodedCategory!, slug!);
+  if(postData === null){
+    return <div>존재하지 않는 포스트입니다.</div>;
+  }
   const toc: TocItem[] = extractTocFromMarkdown(postData.content);
 
   return (
-    <div className="grid grid-cols-[1fr_800px_1fr] gap-8 w-full">
-      <div className="flex justify-end"> <CategorySidebar category={category} /></div>
+    <div className="grid grid-cols-[1fr_1000px_1fr] gap-8 w-full">
+      <div className="flex justify-end"> <CategorySidebar category={decodedCategory} /></div>
 
       {/* 중간 콘텐츠 */}
       <div className="w-full mx-auto">
@@ -72,7 +77,7 @@ export default async function Post({
                 remarkPlugins: [remarkGfm, remarkMath],
                 rehypePlugins: [
                   [rehypePrettyCode, prettyOptions],
-                  rehypeKatex,
+                  [rehypeKatex],
                   rehypeSlug,
                   [
                     rehypeAutolinkHeadings,

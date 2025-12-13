@@ -83,7 +83,7 @@ export function getPostsByCategory(category: string) {
 }
 
 
-export function getPostDatac(category: string, slug: string): Post {
+export function getPostDatac(category: string, slug: string): Post | null{
   slug = slug.toLowerCase();
 
   let targetPath: string;
@@ -98,7 +98,7 @@ export function getPostDatac(category: string, slug: string): Post {
 
   // 파일 존재 확인
   if (!fs.existsSync(targetPath)) {
-    throw new Error(`Post not found: ${category}/${slug}`);
+    return null;
   }
 
   const fileContents = fs.readFileSync(targetPath, "utf8");

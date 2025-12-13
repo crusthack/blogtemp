@@ -4,6 +4,7 @@ import "./globals.css";
 import 'github-markdown-css/github-markdown-light.css'
 import Navi from "@/components/Navigation";
 import { getAllCategories } from "@/lib/posts";
+import Footer from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +34,7 @@ export default function RootLayout({
         >
         <Navi categories={categories} />
         {children}
+        <Footer/>
       </body>
     </html>
   );

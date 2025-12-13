@@ -7,7 +7,7 @@ export default function Navi({ categories }: { categories: string[] }) {
     const [open, setOpen] = useState(false);
 
     return (
-        <nav className="relative w-full h-16 bg-transparent grid grid-cols-[1fr_2fr_1fr]">
+        <nav className="relative w-full h-16 bg-transparent grid grid-cols-[1fr_1000px_1fr]">
 
             <div></div>
 
@@ -50,14 +50,13 @@ export default function Navi({ categories }: { categories: string[] }) {
 
                         {open && (
                             <div
-                                className="absolute top-full left-0 mt-0
-                                       w-40 bg-white shadow-lg rounded-md border p-2 z-50"
+                                className="absolute mt-0 left-0 min-w-[12rem] bg-white shadow-lg rounded-md border p-2 z-50"
                             >
                                 {categories.map((cat) => (
                                     <Link
                                         key={cat}
                                         href={`/${cat}`}
-                                        className="block px-3 py-2 hover:bg-gray-100 rounded"
+                                        className="block px-3 py-2 hover:bg-gray-100 w-full rounded"
                                     >
                                         {cat}
                                     </Link>

@@ -9,15 +9,16 @@ import rehypeSlug from 'rehype-slug'
 
 import CodeBlockCopyButton from '@/components/CodeBlockCopyButton'
 
-import { TocItem, extractTocFromMarkdown } from "@/lib/extractToc";
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 
 export default async function Post() {
     const postData = getPostDatac("", 'index')
-    const toc: TocItem[] = extractTocFromMarkdown(postData.content);
+    if(postData === null){
+        return <div>존재하지 않는 포스트입니다.</div>;
+    }
 
     return (
-        <div className="grid grid-cols-[1fr_2fr_1fr] gap-8 w-full">
+        <div className="grid grid-cols-[1fr_1000px_1fr] gap-8 w-full">
 
             {/* 왼쪽 빈 공간 */}
             <div>
