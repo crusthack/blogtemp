@@ -51,7 +51,6 @@ export default async function Post({
   params: Promise<{ category: string, slug?: string }>;
 }) {
   let { category, slug } = await params;
-  console.log(category);
   const decodedCategory = typeof category === "string" ? decodeURIComponent(category).replace(/\+/g, " ").trim() : category;
 
   const postData = getPostDatac(decodedCategory!, slug!);
