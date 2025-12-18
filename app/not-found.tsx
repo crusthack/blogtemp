@@ -1,18 +1,41 @@
-import Link from 'next/link'
+import { getPostData } from "@/lib/posts";
+import BlogPost from "@/components/BlogPost";
+import { MDXRemote } from "next-mdx-remote/rsc";
+import { mdxOptions } from "@/lib/mdxOptions";
+import CodeBlockCopyButton from "@/components/CodeBlockCopyButton";
+import { TocItem, extractTocFromMarkdown } from "@/lib/extractToc";
+import LeftSidebar from "@/components/LeftSidebar";
+import RightSidebar from "@/components/RightSidebar";
 
 export default function NotFound() {
+    let postData = getPostData("", "404");
+    let toc: TocItem[] = [];
+
+    toc = extractTocFromMarkdown(postData!.content);
+
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
-            <div className="text-center">
-                <h1 className="text-6xl font-bold text-gray-900 mb-4">404</h1>
-                <p className="text-gray-600 mb-8">요청하신 페이지가 존재하지 않습니다.</p>
-                <Link
-                    href="/"
-                    className="inline-block bg-[#e91e63] text-white px-6 py-3 rounded-lg hover:bg-[#c2185b] transition-colors"
-                >
-                    홈으로 돌아가기
-                </Link>
+        <div className="grid grid-cols-[1fr_1000px_1fr] gap-8 w-full">
+            <div className="flex justify-end">
+                <LeftSidebar />
+            </div>
+
+            {/* 중간 콘텐츠 */}
+            <div className="w-full mx-auto">
+                <BlogPost post={postData!}>
+                    <MDXRemote
+                        source={postData!.content}
+                        components={{
+                            pre: (props) => <CodeBlockCopyButton {...props} />,
+                        }}
+                        options={{ mdxOptions }}
+                    />
+                </BlogPost>
+            </div>
+
+            {/* 오른쪽 TOC → 클라이언트 컴포넌트 */}
+            <div className="flex justify-start">
+                <RightSidebar />
             </div>
         </div>
-    )
+    );
 }

@@ -1,5 +1,6 @@
 import { getSortedPostsData, getPostData } from "@/lib/posts";
 import { redirect } from "next/navigation";
+import NotFound from "../not-found";
 
 export async function generateStaticParams() {
   const posts = getSortedPostsData();
@@ -30,7 +31,7 @@ export default async function Post({
   const filtered = posts.filter((post) => post.category === decodedCategory);
     
   if (filtered.length === 0) {
-    return <div>해당 카테고리에 글이 없습니다.</div>;
+    return NotFound();
   }
 
   // 가장 최근 글 slug (날짜 내림차순이므로 첫 번째)
