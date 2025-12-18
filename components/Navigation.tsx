@@ -55,7 +55,7 @@ export default function Navi({ categories }: { categories: string[] }) {
                                 {categories.map((cat) => (
                                     <Link
                                         key={cat}
-                                        href={`/${cat}`}
+                                        href={`/${encodeURIComponent(cat)}`}
                                         className="block px-3 py-2 hover:bg-gray-100 w-full rounded"
                                     >
                                         {cat}
@@ -65,12 +65,22 @@ export default function Navi({ categories }: { categories: string[] }) {
                         )}
                     </div>
 
+                    {/* 카테고리 전용 링크: Project / Journal */}
                     <Link
-                        href="/journal"
+                        href={`/${encodeURIComponent('Project')}`}
+                        className="px-3 py-2 hover:bg-gray-200 rounded transition"
+                    >
+                        프로젝트
+                    </Link>
+
+                    <Link
+                        href={`/${encodeURIComponent('Journal')}`}
                         className="px-3 py-2 hover:bg-gray-200 rounded transition"
                     >
                         일지
                     </Link>
+
+                    {/* 일지 링크 제거 */}
 
                 </div>
             </div>

@@ -15,7 +15,7 @@
     "@types/mdx": "^2.0.13",
     "github-markdown-css": "^5.8.1",
     "gray-matter": "^4.0.3",
-    "next": "16.0.7",
+    "next": "^16.0.10",
     "next-mdx-remote": "^5.0.0",
     "react": "19.2.0",
     "react-dom": "19.2.0",
@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@types/node": "^20.19.27",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",

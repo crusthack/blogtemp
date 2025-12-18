@@ -5,15 +5,15 @@ export default function CategorySidebar({ category }: { category: string }) {
   const posts = getPostsByCategory(category);
 
   return (
-    <aside className="sticky top-20 space-y-2">
-      <h2 className="font-bold text-lg mb-3 capitalize">{category}</h2>
+    <aside className="sticky top-20 space-y-2 mt-2">
+      <h2 className="font-bold text-xl mb-3 capitalize">{category}</h2>
 
       <ul className="space-y-1">
         {posts.map(post => (
           <li key={post.slug}>
             <Link
-              href={`/${category}/${post.slug}`}
-              className="block px-2 py-1 hover:bg-gray-200 rounded"
+              href={`/${encodeURIComponent(category)}/${encodeURIComponent(post.slug)}`}
+              className="block hover:text-blue-600"
             >
               {post.title ?? post.slug}
             </Link>

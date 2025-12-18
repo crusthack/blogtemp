@@ -1,4 +1,4 @@
-import Slugger, { slug } from "github-slugger";
+import { slug } from "github-slugger";
 
 export interface TocItem {
   level: number;

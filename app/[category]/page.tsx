@@ -1,11 +1,10 @@
-import { getSortedPostsData } from "@/lib/posts";
+import { getSortedPostsData, getPostDatac } from "@/lib/posts";
 import { redirect } from "next/navigation";
 
 export async function generateStaticParams() {
   const posts = getSortedPostsData();
-  return posts.map((post) => ({
-    category: post.category,
-  }));
+  const uniqueCategories = Array.from(new Set(posts.map((post) => post.category)));
+  return uniqueCategories.map((category) => ({ category }));
 }
 
 export default async function Post({
@@ -18,19 +17,23 @@ export default async function Post({
   // 디코드: URL 인코딩(%20, + 등)을 공백으로 변환
   const decodedCategory = typeof category === "string" ? decodeURIComponent(category).replace(/\+/g, " ").trim() : category;
 
-  // 모든 포스트 불러오기
+  // 카테고리 index.mdx가 있으면 우선 이동
+  const indexPost = getPostDatac(decodedCategory, "index");
+  if (indexPost) {
+    redirect(`/${encodeURIComponent(decodedCategory)}/index`);
+  }
+
+  // 모든 포스트 불러오기 (날짜 내림차순 정렬됨)
   const posts = getSortedPostsData();
 
-  // 해당 카테고리 포스트만 필터
-  const filtered = posts
-    .filter((post) => post.category === decodedCategory)
-    .sort((a, b) => a.slug.localeCompare(b.slug)); // 🔥 slug 알파벳 순 정렬
+  // 해당 카테고리 포스트만 필터 (이미 날짜 내림차순 상태 유지)
+  const filtered = posts.filter((post) => post.category === decodedCategory);
     
   if (filtered.length === 0) {
     return <div>해당 카테고리에 글이 없습니다.</div>;
   }
 
-  // 가장 앞글 slug
+  // 가장 최근 글 slug (날짜 내림차순이므로 첫 번째)
   const firstSlug = filtered[0].slug;
 
   // 자동 이동 (경로 안전 인코딩)

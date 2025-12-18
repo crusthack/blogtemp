@@ -1,33 +1,33 @@
 import { getPostDatac, getSortedPostsData } from '@/lib/posts'
 import BlogPost from '@/components/BlogPost'
 import { MDXRemote } from 'next-mdx-remote/rsc'
-import remarkGfm from 'remark-gfm'
-import remarkMath from 'remark-math'
-import rehypePrettyCode from 'rehype-pretty-code'
-import rehypeKatex from 'rehype-katex'
-import rehypeSlug from 'rehype-slug'
+import { mdxOptions } from '@/lib/mdxOptions'
+import LeftSidebar from '@/components/LeftSidebar'
+import RightSidebar from '@/components/RightSidebar'
+ 
 
 import CodeBlockCopyButton from '@/components/CodeBlockCopyButton'
 
-import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+// MDX plugins are provided via shared options
 
 export default async function Post() {
     const postData = getPostDatac("", 'index')
-    if(postData === null){
+    if (postData === null) {
         return <div>존재하지 않는 포스트입니다.</div>;
     }
+
+    const allPosts = getSortedPostsData()
 
     return (
         <div className="grid grid-cols-[1fr_1000px_1fr] gap-8 w-full">
 
-            {/* 왼쪽 빈 공간 */}
-            <div>
-
+            {/* 왼쪽 사이드 컨텐츠 */}
+            <div className="flex justify-end">
+                <LeftSidebar />
             </div>
 
             {/* 가운데 컨텐츠 */}
             <div className="w-full mx-auto">
-
                 <BlogPost post={postData}>
                     <MDXRemote
                         source={postData.content}
@@ -35,30 +35,16 @@ export default async function Post() {
                             pre: (props) => <CodeBlockCopyButton {...props} />,
                         }}
                         options={{
-                            mdxOptions: {
-                                remarkPlugins: [remarkGfm, remarkMath],
-                                rehypePlugins: [
-                                    rehypePrettyCode,
-                                    rehypeKatex,
-                                    rehypeSlug,
-                                    [
-                                        rehypeAutolinkHeadings,
-                                        {
-                                            behavior: "wrap",
-                                            properties: {
-                                                style: "color: inherit; text-decoration: none;",
-                                            },
-                                        },
-                                    ],
-                                ],
-                            },
+                            mdxOptions,
                         }}
                     />
                 </BlogPost>
-
             </div>
 
-            <div/>
+            {/* 오른쪽 사이드 컨텐츠 */}
+            <div className="flex justify-start">
+                <RightSidebar />
+            </div>
 
         </div>
 

@@ -47,7 +47,10 @@ export function getAllCategories() {
     return fs.statSync(fullPath).isDirectory();
   });
 
-  return dirs;
+  const excluded = new Set(["Project", "Journal"]);
+  return dirs
+    .filter((d) => !excluded.has(d))
+    .sort((a, b) => a.localeCompare(b));
 }
 
 
