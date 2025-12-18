@@ -84,7 +84,7 @@ export function getPostsByCategory(category: string) {
 }
 
 
-export function getPostDatac(category: string, slug: string): Post | null{
+export function getPostData(category: string, slug: string): Post | null{
   let targetPath: string;
 
   if (category && category.trim() !== "") {
@@ -106,32 +106,6 @@ export function getPostDatac(category: string, slug: string): Post | null{
   return {
     slug,
     category,
-    title: data.title,
-    date: data.date,
-    description: data.description,
-    content,
-  };
-}
-
-export function getPostData(slug: string): Post {
-  const filePaths = walkDir(postsDirectory);
-
-  const fullPath = filePaths.find((p) =>
-    p.endsWith(`${slug}.mdx`)
-  );
-
-  if (!fullPath) {
-    throw new Error(`Post not found: ${slug}`);
-  }
-
-  const fileContents = fs.readFileSync(fullPath, "utf8");
-  const { data, content } = matter(fileContents);
-
-  const category = path.basename(path.dirname(fullPath));
-
-  return {
-    slug,
-    category: data.category || category,
     title: data.title,
     date: data.date,
     description: data.description,

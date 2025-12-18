@@ -5,10 +5,10 @@ import CodeBlockCopyButton from "@/components/CodeBlockCopyButton";
 import LeftSidebar from "@/components/LeftSidebar";
 import RightSidebar from "@/components/RightSidebar";
 import type { Metadata } from "next";
-import { getPostDatac } from "@/lib/posts";
+import { getPostData } from "@/lib/posts";
 
 export async function generateMetadata(): Promise<Metadata> {
-    const post = getPostDatac("", 'about')
+    const post = getPostData("", 'about')
     return {
         title: post?.title ?? "소개",
         description: post?.description ?? "소개 페이지",
@@ -16,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function AboutPage() {
-    const post = getPostDatac("", 'about')
+    const post = getPostData("", 'about')
     if (post === null) {
         return <div>존재하지 않는 포스트입니다.</div>;
     }

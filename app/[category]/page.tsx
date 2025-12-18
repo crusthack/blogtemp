@@ -1,4 +1,4 @@
-import { getSortedPostsData, getPostDatac } from "@/lib/posts";
+import { getSortedPostsData, getPostData } from "@/lib/posts";
 import { redirect } from "next/navigation";
 
 export async function generateStaticParams() {
@@ -18,7 +18,7 @@ export default async function Post({
   const decodedCategory = typeof category === "string" ? decodeURIComponent(category).replace(/\+/g, " ").trim() : category;
 
   // 카테고리 index.mdx가 있으면 우선 이동
-  const indexPost = getPostDatac(decodedCategory, "index");
+  const indexPost = getPostData(decodedCategory, "index");
   if (indexPost) {
     redirect(`/${encodeURIComponent(decodedCategory)}/index`);
   }

@@ -1,4 +1,4 @@
-import { getPostDatac, getSortedPostsData } from "@/lib/posts";
+import { getPostData, getSortedPostsData } from "@/lib/posts";
 import BlogPost from "@/components/BlogPost";
 import PostToc from "@/components/PostToc";
 import { MDXRemote } from "next-mdx-remote/rsc";
@@ -28,10 +28,10 @@ export async function generateMetadata({
     typeof category === "string"
       ? decodeURIComponent(category).replace(/\+/g, " ").trim()
       : category;
-  let post = getPostDatac(decodedCategory!, slug);
+  let post = getPostData(decodedCategory!, slug);
 
   if (!post) {
-    post = getPostDatac("", "404");
+    post = getPostData("", "404");
   }
 
   return {
@@ -51,7 +51,7 @@ export default async function Page({
       ? decodeURIComponent(category).replace(/\+/g, " ").trim()
       : category;
 
-  let postData = getPostDatac(decodedCategory!, slug!) ?? getPostDatac("", "404");
+  let postData = getPostData(decodedCategory!, slug!) ?? getPostData("", "404");
   let toc: TocItem[] = [];
 
   toc = extractTocFromMarkdown(postData!.content);

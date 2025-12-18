@@ -1,22 +1,18 @@
-import { getPostDatac, getSortedPostsData } from '@/lib/posts'
+import { getPostData } from '@/lib/posts'
 import BlogPost from '@/components/BlogPost'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { mdxOptions } from '@/lib/mdxOptions'
 import LeftSidebar from '@/components/LeftSidebar'
 import RightSidebar from '@/components/RightSidebar'
- 
-
 import CodeBlockCopyButton from '@/components/CodeBlockCopyButton'
 
 // MDX plugins are provided via shared options
 
 export default async function Post() {
-    const postData = getPostDatac("", 'index')
+    const postData = getPostData("", 'index')
     if (postData === null) {
         return <div>존재하지 않는 포스트입니다.</div>;
     }
-
-    const allPosts = getSortedPostsData()
 
     return (
         <div className="grid grid-cols-[1fr_1000px_1fr] gap-8 w-full">
