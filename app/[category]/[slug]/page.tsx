@@ -89,6 +89,7 @@ export default async function Page({
                 return (
                   <span className="relative block w-full aspect-[3/2]">
                     <Image
+                      unoptimized
                       {...props}
                       src={src}
                       alt={props.alt ?? ""}

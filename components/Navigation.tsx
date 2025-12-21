@@ -25,13 +25,13 @@ export default function Navi({ categories }: { categories: string[] }) {
                         />
                         <p>Main</p>
                     </Link>
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
+                    <Image
+                        src="/images/Web/catbattle/a.jpg"
+                        alt="logo"
+                        width={100}
+                        height={40}
+                        className="object-contain"
+                    />
                 </div>
 
                 <div className="flex items-center justify-end px-6 gap-2">
