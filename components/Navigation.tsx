@@ -26,7 +26,7 @@ export default function Navi({ categories }: { categories: string[] }) {
                         <p>Main</p>
                     </Link>
                     <Image
-                        src="/images/Web/catbattle/a.jpg"
+                        src="/blogtemp/images/Web/catbattle/a.jpg"
                         alt="logo"
                         width={100}
                         height={40}
