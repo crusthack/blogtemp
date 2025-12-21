@@ -56,6 +56,18 @@ export default async function Page({
 
   toc = extractTocFromMarkdown(postData!.content);
 
+  // Resolve relative media paths (e.g., "a.jpg") to content/images/<category>/<slug>/a.jpg
+  const resolveMediaPath = (value: string | undefined) => {
+    if (!value) return undefined;
+    const v = String(value);
+    // Keep absolute, protocol, and hash links untouched
+    if (v.startsWith("/") || v.startsWith("http://") || v.startsWith("https://") || v.startsWith("#")) {
+      return v;
+    }
+    // Map to our file-serving route
+    return `/images/${encodeURIComponent(decodedCategory!)}/${encodeURIComponent(slug!)}/${v}`;
+  };
+
   return (
     <div className="grid grid-cols-[1fr_1000px_1fr] gap-8 w-full">
       <div className="flex justify-end">
@@ -69,6 +81,16 @@ export default async function Page({
             source={postData!.content}
             components={{
               pre: (props) => <CodeBlockCopyButton {...props} />,
+              img: (props) => {
+                const src = resolveMediaPath(props.src as any);
+                if (!src) return null;
+                return <img {...props} src={src} />;
+              },
+              a: (props: any) => {
+                const href = resolveMediaPath(props.href);
+                if (!href) return <span {...props} />; // render fallback without href
+                return <a {...props} href={href} />;
+              },
             }}
             options={{ mdxOptions }}
           />
