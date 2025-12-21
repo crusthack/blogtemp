@@ -8,7 +8,6 @@ import { TocItem, extractTocFromMarkdown } from "@/lib/extractToc";
 import CategorySidebar from "@/components/CategorySidebar";
 import type { Metadata } from "next";
 import Image from "next/image";
-const _utils = require("../shared/lib/utils");
 
 // MDX plugins are provided via shared options
 
@@ -66,11 +65,8 @@ export default async function Page({
     if (v.startsWith("/") || v.startsWith("http://") || v.startsWith("https://") || v.startsWith("#")) {
       return v;
     }
-    if((0, _utils.isAbsoluteUrl)(v)) {
-      return v;
-    }
     // Map to our file-serving route
-    return `blogtemp/images/${encodeURIComponent(decodedCategory!)}/${encodeURIComponent(slug!)}/${v}`;
+    return `/blogtemp/images/${encodeURIComponent(decodedCategory!)}/${encodeURIComponent(slug!)}/${v}`;
   };
 
   return (
